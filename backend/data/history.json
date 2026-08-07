@@ -1,5 +1,37 @@
 [
   {
+    "url": "http://wap. xxxmobilemovieclub.com?n=QJKGIGHJJGCBL",
+    "label": "Safe",
+    "score": 25,
+    "source": "heuristics",
+    "timestamp": "2026-07-17T06:28:41.062Z",
+    "refId": "REF-U237MYUJ7"
+  },
+  {
+    "url": "mp3raid.com/music/krizz_kaliko.html",
+    "label": "Safe",
+    "score": 0,
+    "source": "dataset",
+    "timestamp": "2026-07-17T06:28:41.047Z",
+    "refId": "REF-C1X0FPU7B"
+  },
+  {
+    "url": "br-icloud.com.br",
+    "label": "Malicious",
+    "score": 95,
+    "source": "dataset",
+    "timestamp": "2026-07-17T06:28:41.024Z",
+    "refId": "REF-3593MCL6K"
+  },
+  {
+    "url": "http://apple-secure-verify-login-update.top",
+    "label": "Malicious",
+    "score": 100,
+    "source": "heuristics",
+    "timestamp": "2026-07-17T06:28:40.802Z",
+    "refId": "REF-KYYII732F"
+  },
+  {
     "url": "http://google.com",
     "label": "Safe",
     "score": 0,
@@ -766,37 +798,5 @@
     "source": "heuristics",
     "timestamp": "2026-02-20T06:28:50.051Z",
     "refId": "REF-OW9Y3IHVO"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/description/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:45.135Z",
-    "refId": "REF-4EUS54QMZ"
-  },
-  {
-    "url": "https://leetcode.com/progress/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:31.803Z",
-    "refId": "REF-9CY9YANB3"
-  },
-  {
-    "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/submissions/1925093312/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:28.029Z",
-    "refId": "REF-XNSG6PRPX"
-  },
-  {
-    "url": "https://leetcode.com/u/nikhil_78/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:21.914Z",
-    "refId": "REF-PB9YQYWLP"
   }
 ]

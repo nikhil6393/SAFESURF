@@ -1,0 +1,5 @@
+Method,Precision (%),Recall (%),F1 Score (%)
+Blacklist Only,100.0,80.0,88.9
+Blacklist + H,99.1,97.6,98.4
+Blacklist + H + S,100.0,98.5,99.3
+Full System (BL + H + S + T),100.0,99.5,99.8
