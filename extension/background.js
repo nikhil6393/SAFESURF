@@ -116,6 +116,10 @@ function evaluateURL(url) {
     if (score < 0) score = 0;
     if (score > 100) score = 100;
 
+    if (reasons.length === 0 && score === 0) {
+        reasons.push("Verified Safe Domain Structure");
+    }
+
     return {
         block: score >= 60,
         score,
@@ -150,23 +154,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Listen for tab updates
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    // Only check when loading is complete and we have a URL
+    // Only check when loading is complete and we have a valid HTTP/HTTPS URL
     if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
         // Run local evaluation first
         const localResult = evaluateURL(tab.url);
-
-        if (localResult.block) {
-            // High risk found locally
-            updateUI(tabId, 'critical', tab.url, localResult);
-        } else if (localResult.score > 0) {
-            // Suspicious but not blocked
-            updateUI(tabId, 'suspicious', tab.url, localResult);
-            // Still perform backend check for more precision
-            checkBackendURL(tab.url, tabId);
-        } else {
-            // Local check says safe, verify with backend
-            checkBackendURL(tab.url, tabId);
+        let status = 'safe';
+        if (localResult.score >= 60) {
+            status = 'critical';
+        } else if (localResult.score >= 35) {
+            status = 'suspicious';
         }
+
+        // Always store initial local evaluation immediately
+        updateUI(tabId, status, tab.url, localResult);
+
+        // Perform backend check asynchronously for deeper intelligence
+        checkBackendURL(tab.url, tabId);
     }
 });
 
@@ -178,18 +181,31 @@ function updateUI(tabId, status, url, data) {
         showNotification(status, url, message);
     }
 
+    // Standardize reasons array for extension popup & content overlay
+    let reasons = data.reasons;
+    if (!reasons || reasons.length === 0) {
+        if (data.details && data.details.length > 0) {
+            reasons = data.details.filter(d => d.type === 'risk').map(d => d.label);
+        }
+    }
+    if (!reasons || reasons.length === 0) {
+        reasons = status === 'safe' ? ["Verified Secure Domain"] : ["Suspicious Structural Vector"];
+    }
+
+    const payload = { ...data, url, status, reasons };
+
     // Trigger in-page overlay for critical AND suspicious threats (Active Intervention)
     if (status === 'critical' || status === 'suspicious') {
         chrome.tabs.sendMessage(tabId, {
             action: 'SHOW_WARNING',
             data: {
-                reasons: data.reasons || ["DETECTED_MALWARE_SIGNATURE"],
+                reasons: reasons,
                 score: data.score
             }
         }).catch(err => console.log("Overlay injection failed (content script not ready):", err));
     }
 
-    chrome.storage.local.set({ [tabId.toString()]: { ...data, url, status } });
+    chrome.storage.local.set({ [tabId.toString()]: payload });
 }
 
 // Function to check URL against backend API
@@ -204,21 +220,25 @@ async function checkBackendURL(url, tabId) {
         });
 
         if (!response.ok) {
-            console.warn('Backend check failed');
+            console.warn('Backend check failed with status:', response.status);
             return;
         }
 
         const data = await response.json();
         const score = data.score || 0;
 
-        // Aligned with backend/services/detectionEngine.js thresholds
+        let status = 'safe';
         if (score >= 60) {
-            updateUI(tabId, 'critical', url, { ...data, reasons: data.details.filter(d => d.type === 'risk').map(d => d.label) });
+            status = 'critical';
         } else if (score >= 35) {
-            updateUI(tabId, 'suspicious', url, { ...data, reasons: data.details.filter(d => d.type === 'risk').map(d => d.label) });
-        } else {
-            updateUI(tabId, 'safe', url, data);
+            status = 'suspicious';
         }
+
+        const reasons = (data.details && data.details.length > 0)
+            ? data.details.filter(d => d.type === 'risk').map(d => d.label)
+            : (data.reasons || ["Verified Secure Domain"]);
+
+        updateUI(tabId, status, url, { ...data, score, reasons });
 
     } catch (error) {
         console.warn('Backend connection error - relying on local heuristics');

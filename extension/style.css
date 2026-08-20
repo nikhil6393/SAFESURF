@@ -26,14 +26,25 @@
     font-family: 'Outfit', sans-serif;
 }
 
+html {
+    width: 380px;
+    height: 600px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 body {
     width: 380px;
     height: 600px;
+    margin: 0;
+    padding: 0;
     background: var(--bg);
     color: white;
     overflow: hidden;
     position: relative;
     border: 1px solid var(--border);
+    box-sizing: border-box;
 }
 
 /* HOLOGRAPHIC AMBIENCE */
