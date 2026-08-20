@@ -53,8 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-icon" style="color:${color}; border-color:${color}44;">
                         <i class="fas ${safety < 50 ? 'fa-biohazard' : 'fa-virus-slash'}"></i>
                     </div>
-                    <div class="card-text"><span>${r}</span></div>
+                    <div class="card-text"><span></span></div>
                 `;
+                // Reason text is set via textContent to avoid HTML injection.
+                card.querySelector('.card-text span').textContent = String(r);
                 intelFeed.appendChild(card);
             });
         }

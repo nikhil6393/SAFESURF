@@ -1,16 +1,18 @@
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 class DatasetLoader {
     constructor() {
         this.dataset = [];
         this.urlMap = new Map();
-        // Load from multiple sources
-        this.datasetPaths = [
-            'C:\\Users\\Nikhil Singh\\Downloads\\archive\\malicious_phish.csv',
-            'E:\\archive\\spam.csv',
-            'E:\\archive (1)\\Phishing_Legitimate_full.csv'
-        ];
+        // External datasets are opt-in via the EXTERNAL_DATASETS env var
+        // (comma-separated absolute paths). When unset, the bundled sample in
+        // ./data/dataset.csv is used, so the project is portable across machines.
+        this.datasetPaths = (process.env.EXTERNAL_DATASETS || '')
+            .split(',')
+            .map(p => p.trim())
+            .filter(Boolean);
     }
 
     init() {

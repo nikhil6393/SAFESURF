@@ -8,6 +8,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function createWarningOverlay(data) {
+    data = data || {};
     // Check if overlay already exists
     if (document.getElementById('safesurf-warning-overlay')) return;
 
@@ -174,9 +175,7 @@ function createWarningOverlay(data) {
                 
                 <div class="reasons">
                     <strong style="color: #fff; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Threat Vectors Detected:</strong>
-                    <ul>
-                        ${data.reasons.map(r => `<li>${r}</li>`).join('')}
-                    </ul>
+                    <ul id="safesurf-reason-list"></ul>
                 </div>
 
                 <div class="actions">
@@ -189,6 +188,17 @@ function createWarningOverlay(data) {
 
     shadow.innerHTML = overlayHTML;
     document.body.appendChild(container);
+
+    // Populate reasons safely via textContent (never innerHTML) — this overlay runs
+    // on every page, so unescaped interpolation here would be XSS on any visited site.
+    const reasonList = shadow.getElementById('safesurf-reason-list');
+    if (reasonList && Array.isArray(data.reasons)) {
+        data.reasons.forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = String(r);
+            reasonList.appendChild(li);
+        });
+    }
 
     // Event Listeners
     shadow.getElementById('back-btn').addEventListener('click', () => {

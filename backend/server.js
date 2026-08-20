@@ -16,8 +16,52 @@ datasetLoader.init();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
+// CORS: restrict to explicitly allowed origins (comma-separated in ALLOWED_ORIGINS).
+// Browser extensions (chrome-extension://) and non-browser clients (no Origin) are allowed.
+// Set ALLOWED_ORIGINS to your deployed frontend origin in production; use "*" to disable the allowlist.
+const allowedOrigins = (process.env.ALLOWED_ORIGINS ||
+    'http://localhost:5000,http://localhost:3000,http://127.0.0.1:5500')
+    .split(',').map(o => o.trim()).filter(Boolean);
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);                       // curl / same-origin / server-to-server
+        if (allowedOrigins.includes('*')) return callback(null, true);  // explicit opt-out of allowlist
+        if (origin.startsWith('chrome-extension://')) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+}));
+
+// Cap request body size to blunt memory-exhaustion payloads.
+app.use(express.json({ limit: '16kb' }));
+
+// Best-effort in-memory rate limiter (per process). NOTE: on serverless/multi-instance
+// deployments each instance keeps its own counter, so use a shared store or the
+// platform's rate limiting for real protection there.
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX = 60;
+const rateHits = new Map();
+app.use((req, res, next) => {
+    const now = Date.now();
+    const ip = req.ip || req.socket?.remoteAddress || 'unknown';
+    let entry = rateHits.get(ip);
+    if (!entry || now > entry.reset) {
+        entry = { count: 0, reset: now + RATE_WINDOW_MS };
+    }
+    entry.count++;
+    rateHits.set(ip, entry);
+
+    // Prune expired entries occasionally so the map can't grow unbounded.
+    if (rateHits.size > 10000) {
+        for (const [k, v] of rateHits) if (now > v.reset) rateHits.delete(k);
+    }
+
+    if (entry.count > RATE_MAX) {
+        return res.status(429).json({ error: 'Too many requests, slow down.' });
+    }
+    next();
+});
 
 // IMPROVED HEURISTIC ENGINE: Weighted Scoring with Whitelist
 const analyzeURL = (url) => {
@@ -54,21 +98,34 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/check-url', async (req, res) => {
-    const { url } = req.body;
-    if (!url) return res.status(400).json({ error: "URL is required" });
+    try {
+        const { url } = req.body || {};
 
-    const result = analyzeURL(url);
-    console.log(`[SCAN] ${url} -> ${result.label} (${result.score}) [Source: ${result.source}]`);
+        // Input validation: reject non-strings (prevents NoSQL-style objects and
+        // TypeErrors deep in the analyzer) and enforce a sane length cap.
+        if (typeof url !== 'string' || url.trim() === '') {
+            return res.status(400).json({ error: 'A non-empty "url" string is required' });
+        }
+        if (url.length > 2048) {
+            return res.status(413).json({ error: 'URL exceeds maximum allowed length (2048)' });
+        }
 
-    // Persist to History (Cloud with Local Fallback)
-    historyService.save({
-        url: result.url,
-        label: result.label,
-        score: result.score,
-        source: result.source
-    });
+        const result = analyzeURL(url);
+        console.log(`[SCAN] ${url} -> ${result.label} (${result.score}) [Source: ${result.source}]`);
 
-    res.json(result);
+        // Persist to History (Cloud with Local Fallback)
+        historyService.save({
+            url: result.url,
+            label: result.label,
+            score: result.score,
+            source: result.source
+        });
+
+        res.json(result);
+    } catch (err) {
+        console.error('check-url error:', err.message);
+        res.status(500).json({ error: 'Internal error during URL analysis' });
+    }
 });
 
 app.get('/api/history', async (req, res) => {

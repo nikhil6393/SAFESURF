@@ -10,6 +10,19 @@ let activityChart = null;
 let analyticsChart = null;
 let scanHistory = [];
 
+// ===================== SECURITY: HTML ESCAPING =====================
+// URLs (and any record field) are attacker-controllable via /api/check-url and
+// are persisted, then rendered here. ALWAYS escape before inserting into innerHTML
+// to prevent stored XSS. Escapes both element and attribute contexts.
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // ===================== INIT =====================
 document.addEventListener('DOMContentLoaded', () => {
     initDeepSpaceBackground();
@@ -408,18 +421,28 @@ function renderLiveStream(logs) {
     const tbody = document.getElementById('scanTableBody');
     if (!tbody || logs.length === 0) return;
 
-    tbody.innerHTML = logs.map((log, idx) => `
+    tbody.innerHTML = logs.map((log, idx) => {
+        const url = String(log.url ?? '');
+        const shortUrl = url.length > 35 ? url.substring(0, 35) + '...' : url;
+        const label = String(log.label ?? '');
+        const source = log.source ? String(log.source).toUpperCase() : 'UNKNOWN';
+        const refId = log.refId ? String(log.refId).substring(4) : '---';
+        const score = Number(log.score) || 0;
+        const isSafe = label.toLowerCase() === 'safe';
+        const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        return `
         <tr style="animation: rowFadeIn 0.4s ${idx * 0.06}s both;">
-            <td><code>#${log.refId ? log.refId.substring(4) : '---'}</code></td>
-            <td title="${log.url}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                ${log.url.length > 35 ? log.url.substring(0, 35) + '...' : log.url}
+            <td><code>#${escapeHtml(refId)}</code></td>
+            <td title="${escapeHtml(url)}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                ${escapeHtml(shortUrl)}
             </td>
-            <td><span class="vector-label">${log.source ? log.source.toUpperCase() : 'UNKNOWN'}</span></td>
-            <td><span class="status-pill ${log.label.toLowerCase() === 'safe' ? 'safe' : 'danger'}">${log.label}</span></td>
-            <td><strong style="color: ${log.score > 60 ? 'var(--rose)' : 'var(--emerald)'}">${log.score}%</strong></td>
-            <td style="color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;">${new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
+            <td><span class="vector-label">${escapeHtml(source)}</span></td>
+            <td><span class="status-pill ${isSafe ? 'safe' : 'danger'}">${escapeHtml(label)}</span></td>
+            <td><strong style="color: ${score > 60 ? 'var(--rose)' : 'var(--emerald)'}">${score}%</strong></td>
+            <td style="color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;">${escapeHtml(time)}</td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function renderFullHistory(logs) {
@@ -428,17 +451,26 @@ function renderFullHistory(logs) {
 
     const sorted = [...logs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    tbody.innerHTML = sorted.map(log => `
+    tbody.innerHTML = sorted.map(log => {
+        const url = String(log.url ?? '');
+        const shortUrl = url.length > 60 ? url.substring(0, 60) + '...' : url;
+        const label = String(log.label ?? '');
+        const refId = log.refId ? String(log.refId) : 'N/A';
+        const score = Number(log.score) || 0;
+        const isSafe = label.toLowerCase() === 'safe';
+        const time = new Date(log.timestamp).toLocaleString();
+        return `
         <tr>
-            <td><code>${log.refId || 'N/A'}</code></td>
-            <td title="${log.url}" style="max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                ${log.url.length > 60 ? log.url.substring(0, 60) + '...' : log.url}
+            <td><code>${escapeHtml(refId)}</code></td>
+            <td title="${escapeHtml(url)}" style="max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                ${escapeHtml(shortUrl)}
             </td>
-            <td><span class="status-pill ${log.label.toLowerCase() === 'safe' ? 'safe' : 'danger'}">${log.label}</span></td>
-            <td><strong style="color: ${log.score > 60 ? 'var(--rose)' : 'var(--emerald)'}">${log.score}%</strong></td>
-            <td style="color: var(--text-muted); font-size: 0.72rem;">${new Date(log.timestamp).toLocaleString()}</td>
+            <td><span class="status-pill ${isSafe ? 'safe' : 'danger'}">${escapeHtml(label)}</span></td>
+            <td><strong style="color: ${score > 60 ? 'var(--rose)' : 'var(--emerald)'}">${score}%</strong></td>
+            <td style="color: var(--text-muted); font-size: 0.72rem;">${escapeHtml(time)}</td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
 }
 
 // ===================== URL SCANNING =====================
@@ -732,15 +764,20 @@ async function fetchDataset() {
 
         const grid = document.getElementById('databaseGrid');
         if (grid) {
-            grid.innerHTML = data.slice(0, 16).map((item, idx) => `
+            grid.innerHTML = data.slice(0, 16).map((item, idx) => {
+                const url = String(item.url ?? '');
+                const label = String(item.label ?? '');
+                const type = String(item.type || 'Signature');
+                return `
                 <div class="intel-node" style="animation: pageIn 0.35s ${idx * 0.04}s both;">
-                    <div class="intel-url" title="${item.url}">${item.url}</div>
+                    <div class="intel-url" title="${escapeHtml(url)}">${escapeHtml(url)}</div>
                     <div class="intel-meta">
-                        <span class="status-pill ${item.label === 'safe' ? 'safe' : 'danger'}">${item.label}</span>
-                        <span class="type-tag">${item.type || 'Signature'}</span>
+                        <span class="status-pill ${label === 'safe' ? 'safe' : 'danger'}">${escapeHtml(label)}</span>
+                        <span class="type-tag">${escapeHtml(type)}</span>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
     } catch (err) { }
 }
