@@ -69,10 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.close();
     });
 
+    // BYPASS closes the popup. Wired here because MV3's content security policy
+    // blocks inline onclick handlers in extension pages.
+    document.getElementById('bypass-btn')?.addEventListener('click', () => window.close());
+
     // Storage Sync
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const tab = tabs[0];
-        if (!tab || !tab.url.startsWith('http')) return;
+        if (!tab || !tab.url || !tab.url.startsWith('http')) return;
 
         chrome.storage.local.get([tab.id.toString()], (res) => {
             const data = res[tab.id.toString()];
