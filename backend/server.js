@@ -125,7 +125,12 @@ const analyzeURL = (url) => {
 
 // ── API Routes ────────────────────────────────────────────────────────────────
 
-app.get('/', (_req, res) =>
+const path = require('path');
+
+// Serve frontend static web app
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+app.get('/api/status', (_req, res) =>
     res.json({ status: 'Online', message: 'SafeSurf Security Backend v2.0' })
 );
 

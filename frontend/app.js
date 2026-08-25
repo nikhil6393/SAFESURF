@@ -85,11 +85,11 @@ function initDeepSpaceBackground() {
                 const dy = dots[i].y - dots[j].y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < CONNECTION_DIST) {
-                    const alpha = (1 - dist / CONNECTION_DIST) * 0.06;
+                    const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
                     ctx.beginPath();
                     const gradient = ctx.createLinearGradient(dots[i].x, dots[i].y, dots[j].x, dots[j].y);
-                    gradient.addColorStop(0, `hsla(${dots[i].hue}, 80%, 65%, ${alpha})`);
-                    gradient.addColorStop(1, `hsla(${dots[j].hue}, 80%, 65%, ${alpha})`);
+                    gradient.addColorStop(0, `hsla(${dots[i].hue}, 70%, 45%, ${alpha})`);
+                    gradient.addColorStop(1, `hsla(${dots[j].hue}, 70%, 45%, ${alpha})`);
                     ctx.strokeStyle = gradient;
                     ctx.lineWidth = 0.6;
                     ctx.moveTo(dots[i].x, dots[i].y);
@@ -105,9 +105,9 @@ function initDeepSpaceBackground() {
             const dy = d.y - mouse.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < MOUSE_DIST) {
-                const alpha = (1 - dist / MOUSE_DIST) * 0.2;
+                const alpha = (1 - dist / MOUSE_DIST) * 0.25;
                 ctx.beginPath();
-                ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
+                ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
                 ctx.lineWidth = 1;
                 ctx.moveTo(d.x, d.y);
                 ctx.lineTo(mouse.x, mouse.y);
@@ -134,13 +134,13 @@ function initDeepSpaceBackground() {
             // Draw dot with glow
             ctx.beginPath();
             ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${d.hue}, 80%, 70%, 0.5)`;
+            ctx.fillStyle = `hsla(${d.hue}, 70%, 45%, 0.6)`;
             ctx.fill();
 
             // Soft glow
             ctx.beginPath();
             ctx.arc(d.x, d.y, d.r * 3, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${d.hue}, 80%, 70%, 0.05)`;
+            ctx.fillStyle = `hsla(${d.hue}, 70%, 45%, 0.08)`;
             ctx.fill();
         }
 
@@ -608,16 +608,16 @@ function showToast(type, msg) {
 
 // ===================== CHARTS =====================
 function initCharts() {
-    Chart.defaults.color = '#475569';
+    Chart.defaults.color = '#64748b';
     Chart.defaults.font.family = '"Inter", sans-serif';
     Chart.defaults.font.weight = 400;
 
     const ctx1 = document.getElementById('activityChart')?.getContext('2d');
     if (ctx1) {
         const gradient = ctx1.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(168, 85, 247, 0.25)');
-        gradient.addColorStop(0.5, 'rgba(34, 211, 238, 0.08)');
-        gradient.addColorStop(1, 'rgba(168, 85, 247, 0.0)');
+        gradient.addColorStop(0, 'rgba(124, 58, 237, 0.18)');
+        gradient.addColorStop(0.5, 'rgba(2, 132, 199, 0.05)');
+        gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
 
         activityChart = new Chart(ctx1, {
             type: 'line',
@@ -626,18 +626,18 @@ function initCharts() {
                 datasets: [{
                     label: 'Risk Score',
                     data: [],
-                    borderColor: '#a855f7',
+                    borderColor: '#7c3aed',
                     backgroundColor: gradient,
                     borderWidth: 2.5,
                     fill: true,
                     tension: 0.45,
                     pointRadius: 4,
-                    pointBackgroundColor: '#030308',
-                    pointBorderColor: '#a855f7',
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#7c3aed',
                     pointBorderWidth: 2,
                     pointHoverRadius: 7,
-                    pointHoverBackgroundColor: '#a855f7',
-                    pointHoverBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#7c3aed',
+                    pointHoverBorderColor: '#ffffff',
                     pointHoverBorderWidth: 2
                 }]
             },
@@ -647,10 +647,10 @@ function initCharts() {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 15, 26, 0.95)',
-                        titleColor: '#eef2ff',
-                        bodyColor: '#94a3b8',
-                        borderColor: 'rgba(168,85,247,0.2)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(124, 58, 237, 0.25)',
                         borderWidth: 1,
                         cornerRadius: 10,
                         padding: 14,
@@ -665,7 +665,7 @@ function initCharts() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.02)', drawBorder: false },
+                        grid: { color: 'rgba(15, 23, 42, 0.06)', drawBorder: false },
                         border: { display: false },
                         ticks: { font: { size: 10 } }
                     },
@@ -692,15 +692,15 @@ function initCharts() {
                 datasets: [{
                     data: [0, 0, 0, 0],
                     backgroundColor: [
-                        '#f43f5e',
-                        '#34d399',
-                        '#fbbf24',
-                        '#a855f7'
+                        '#e11d48',
+                        '#059669',
+                        '#d97706',
+                        '#7c3aed'
                     ],
-                    borderColor: '#0f0f1a',
+                    borderColor: '#ffffff',
                     borderWidth: 4,
                     hoverOffset: 12,
-                    hoverBorderColor: '#1a1a2e'
+                    hoverBorderColor: '#f1f5f9'
                 }]
             },
             options: {
@@ -715,14 +715,14 @@ function initCharts() {
                             usePointStyle: true,
                             pointStyle: 'circle',
                             font: { size: 11, family: '"Inter"', weight: 500 },
-                            color: '#94a3b8'
+                            color: '#64748b'
                         }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 15, 26, 0.95)',
-                        titleColor: '#eef2ff',
-                        bodyColor: '#94a3b8',
-                        borderColor: 'rgba(168,85,247,0.2)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(124, 58, 237, 0.25)',
                         borderWidth: 1,
                         cornerRadius: 10,
                         padding: 14,
