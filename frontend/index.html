@@ -1,52 +1,115 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeSurf | Neural Threat Intelligence Platform</title>
-    <meta name="description" content="Advanced AI-powered malware URL detection with real-time heuristic analysis and zero-day anomaly detection.">
+    <title>SafeSurf | AI-Powered URL Threat Detection</title>
+    <meta name="description" content="SafeSurf — Advanced AI malware URL detection with real-time threat intelligence, neural analysis, and zero-day anomaly detection.">
+    <meta name="theme-color" content="#0a0a1a">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-
 <body>
-    <!-- 3D LANDING PAGE OVERLAY -->
+    <!-- LANDING PAGE -->
     <div id="landing-overlay" class="landing-overlay">
-        <div id="landing-3d-container"></div>
+        <div class="landing-grid"></div>
+        <div class="landing-orb orb-1"></div>
+        <div class="landing-orb orb-2"></div>
+        <div class="landing-orb orb-3"></div>
+        <canvas id="landingCanvas" class="landing-canvas"></canvas>
         <div class="landing-content">
-            <div class="logo-icon landing-logo">
-                <i class="fas fa-shield-halved"></i>
+            <div class="landing-badge">
+                <span class="badge-dot"></span>
+                <span>Neural Engine v3.0 &bull; 97.8% Accuracy</span>
             </div>
-            <h1 class="landing-title">SafeSurf <span class="text-gradient">Neural Core</span></h1>
-            <p class="landing-subtitle">Initializing Advanced Threat Intelligence Engine...</p>
-            <button id="enter-core-btn" class="neon-btn landing-btn">
-                <span>Enter System</span>
-                <i class="fas fa-arrow-right"></i>
-            </button>
+            <div class="landing-logo-wrap">
+                <div class="landing-logo-hex">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div class="logo-rings">
+                    <div class="logo-ring r1"></div>
+                    <div class="logo-ring r2"></div>
+                    <div class="logo-ring r3"></div>
+                </div>
+            </div>
+            <h1 class="landing-title">
+                <span class="title-line">SafeSurf</span>
+                <span class="title-line gradient-text">Neural Threat Intelligence</span>
+            </h1>
+            <p class="landing-subtitle">
+                Military-grade AI detection engine. Scans URLs in <strong>&lt;200ms</strong> using ensemble neural networks, heuristic pattern matching, and live threat feeds.
+            </p>
+            <div class="landing-stats">
+                <div class="l-stat">
+                    <span class="l-stat-num" id="lstat-sigs">2,287</span>
+                    <span class="l-stat-label">Threat Signatures</span>
+                </div>
+                <div class="l-stat-divider"></div>
+                <div class="l-stat">
+                    <span class="l-stat-num">97.8%</span>
+                    <span class="l-stat-label">ML Accuracy</span>
+                </div>
+                <div class="l-stat-divider"></div>
+                <div class="l-stat">
+                    <span class="l-stat-num">&lt;200ms</span>
+                    <span class="l-stat-label">Scan Speed</span>
+                </div>
+            </div>
+            <div class="landing-scan-wrap">
+                <div class="landing-search">
+                    <i class="fas fa-crosshairs"></i>
+                    <input type="text" id="landingUrlInput" placeholder="Paste a suspicious URL..." autocomplete="off" spellcheck="false">
+                    <button onclick="landingQuickScan()" class="landing-scan-btn" id="landingScanBtn">
+                        <span>Analyze</span>
+                        <i class="fas fa-bolt"></i>
+                    </button>
+                </div>
+                <p class="landing-hint">or <button class="link-btn" onclick="enterDashboard()">enter the full dashboard <i class="fas fa-arrow-right"></i></button></p>
+            </div>
+            <div class="landing-trust">
+                <span><i class="fas fa-lock"></i> End-to-end secure</span>
+                <span><i class="fas fa-bolt"></i> Real-time detection</span>
+                <span><i class="fas fa-brain"></i> AI-powered</span>
+                <span><i class="fas fa-database"></i> 2,287 threat feeds</span>
+            </div>
+        </div>
+        <div class="landing-scroll" onclick="enterDashboard()">
+            <span>Enter Dashboard</span>
+            <div class="scroll-chevron"><i class="fas fa-chevron-down"></i></div>
         </div>
     </div>
 
-    <!-- DEEP SPACE BACKGROUND -->
+    <!-- QUICK RESULT LANDING MODAL -->
+    <div id="landingResultModal" class="landing-result-modal">
+        <div class="lrm-card">
+            <button class="lrm-close" onclick="closeLandingResult()"><i class="fas fa-xmark"></i></button>
+            <div id="lrm-icon" class="lrm-icon safe"><i class="fas fa-shield-check"></i></div>
+            <h2 id="lrm-verdict">SAFE</h2>
+            <p id="lrm-url" class="lrm-url">https://example.com</p>
+            <div class="lrm-stats">
+                <div class="lrm-stat"><span>Threat Score</span><strong id="lrm-score">12%</strong></div>
+                <div class="lrm-stat"><span>Confidence</span><strong id="lrm-confidence">98%</strong></div>
+                <div class="lrm-stat"><span>Detection</span><strong id="lrm-source">ML</strong></div>
+            </div>
+            <button onclick="enterDashboard()" class="lrm-cta">View Full Analysis <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- APP SHELL -->
     <canvas id="bgCanvas"></canvas>
     <div class="aurora-layer"></div>
     <div class="noise-overlay"></div>
-
-    <!-- FLOATING PARTICLES -->
     <div class="floating-particles" id="particles"></div>
 
-    <!-- NOTIFICATION TOAST -->
+    <!-- TOAST -->
     <div id="toast" class="toast-notification">
         <div class="toast-glow"></div>
-        <div class="toast-icon-wrap">
-            <i class="fas fa-shield-halved"></i>
-        </div>
+        <div class="toast-icon-wrap"><i class="fas fa-shield-halved"></i></div>
         <div class="toast-content">
             <span class="toast-title">Scan Complete</span>
             <p id="toast-msg">Assessment finished successfully.</p>
@@ -90,20 +153,20 @@
                         <div id="modal-bar" class="modal-bar-fill" style="width: 12%"></div>
                     </div>
                 </div>
-                <div class="modal-signals-wrap" style="margin-top: 16px; text-align: left;">
-                    <div class="modal-bar-label" style="margin-bottom: 8px;"><i class="fas fa-microchip" style="color: var(--accent); margin-right: 6px;"></i> Explainable Neural Signals:</div>
-                    <div id="modal-signals-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;"></div>
+                <div class="modal-signals-wrap" style="margin-top:16px;text-align:left;">
+                    <div class="modal-bar-label" style="margin-bottom:8px;"><i class="fas fa-microchip" style="color:var(--accent);margin-right:6px;"></i>Explainable Neural Signals:</div>
+                    <div id="modal-signals-list" style="display:flex;flex-direction:column;gap:6px;font-size:0.8rem;"></div>
                 </div>
             </div>
-            <div class="modal-actions-container" style="display: flex; gap: 10px; margin-top: 18px;">
-                <button class="modal-action-btn neon-btn" id="exportPdfBtn" onclick="exportCurrentScanPdf()" style="flex: 1; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border: none; border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <div class="modal-actions-container" style="display:flex;gap:10px;margin-top:18px;">
+                <button class="modal-action-btn neon-btn" id="exportPdfBtn" onclick="exportCurrentScanPdf()" style="flex:1;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                     <i class="fas fa-file-pdf"></i> Export PDF Report
                 </button>
-                <button class="modal-action-btn" id="archiveCloudBtn" onclick="archiveCurrentScanToCloud()" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--text-main, #fff); border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <button class="modal-action-btn" id="archiveCloudBtn" onclick="archiveCurrentScanToCloud()" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-main,#fff);border-radius:8px;padding:10px 14px;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                     <i class="fas fa-cloud-arrow-up"></i> Save to Cloudinary
                 </button>
             </div>
-            <button class="modal-action-btn" onclick="closeModal()" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: #94a3b8; font-size: 0.8rem; cursor: pointer; padding: 6px;">
+            <button onclick="closeModal()" style="width:100%;margin-top:10px;background:transparent;border:none;color:#94a3b8;font-size:0.8rem;cursor:pointer;padding:6px;">
                 <i class="fas fa-xmark"></i> Dismiss
             </button>
         </div>
@@ -122,11 +185,10 @@
                     </div>
                     <div class="logo-text">
                         <span class="logo-name">SafeSurf</span>
-                        <span class="logo-version">NEURAL v2.0</span>
+                        <span class="logo-version">NEURAL v3.0</span>
                     </div>
                 </div>
             </div>
-
             <nav class="menu" aria-label="Main navigation">
                 <div class="menu-section-label">OPERATIONS</div>
                 <a href="#" class="active" data-page="dashboard" id="nav-dashboard">
@@ -139,7 +201,6 @@
                     <span>Scan Archives</span>
                     <div class="menu-hover-glow"></div>
                 </a>
-
                 <div class="menu-section-label">INTELLIGENCE</div>
                 <a href="#" data-page="database" id="nav-database">
                     <div class="menu-icon"><i class="fas fa-database"></i></div>
@@ -152,48 +213,38 @@
                     <div class="menu-hover-glow"></div>
                 </a>
             </nav>
-
             <div class="sidebar-footer">
                 <div class="system-status">
                     <div class="status-indicator online"></div>
                     <span>Neural Core Online</span>
                 </div>
                 <div class="engine-stats">
-                    <div class="engine-bar">
-                        <div class="engine-bar-fill" style="width: 87%;"></div>
-                    </div>
+                    <div class="engine-bar"><div class="engine-bar-fill" style="width:87%;"></div></div>
                     <span class="engine-label">Engine Load: 87%</span>
                 </div>
             </div>
         </div>
     </aside>
-
-    <!-- MOBILE OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- CONTENT -->
+    <!-- MAIN CONTENT -->
     <main class="main-content" id="mainContent">
         <header class="header">
             <div class="header-left">
-                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu"><i class="fas fa-bars"></i></button>
                 <div class="welcome">
                     <div class="welcome-badge">
                         <i class="fas fa-satellite-dish"></i>
                         <span>LIVE MONITORING</span>
                     </div>
                     <h1>Threat Intelligence <span class="text-gradient">Hub</span></h1>
-                    <p>Real-time heuristic monitoring & zero-day anomaly detection</p>
+                    <p>Real-time heuristic monitoring &amp; zero-day anomaly detection</p>
                 </div>
             </div>
             <div class="search-bar-3d" id="searchBar">
                 <div class="search-bar-inner">
-                    <div class="search-icon-wrap">
-                        <i class="fas fa-crosshairs search-icon"></i>
-                    </div>
-                    <input type="text" id="urlInput" placeholder="Paste a suspicious URL to analyze..."
-                        aria-label="URL input for analysis" autocomplete="off" spellcheck="false">
+                    <div class="search-icon-wrap"><i class="fas fa-crosshairs search-icon"></i></div>
+                    <input type="text" id="urlInput" placeholder="Paste a suspicious URL to analyze..." aria-label="URL input for analysis" autocomplete="off" spellcheck="false">
                     <button onclick="scanURL()" class="scan-btn neon-btn" id="scanBtn" aria-label="Analyze URL">
                         <span id="scan-text">Analyze</span>
                         <i class="fas fa-bolt"></i>
@@ -204,23 +255,16 @@
             </div>
         </header>
 
-        <!-- DASHBOARD PAGE -->
+        <!-- DASHBOARD -->
         <div id="dashboard-page" class="page-content active">
-            <!-- 3D STAT CARDS -->
             <div class="stats-grid">
                 <div class="tilt-card stat-card" data-accent="purple" id="stat-total">
                     <div class="card-3d-inner">
                         <div class="card-shine"></div>
                         <div class="card-border-glow purple"></div>
                         <div class="stat-top">
-                            <div class="stat-icon-wrap purple">
-                                <i class="fas fa-crosshairs"></i>
-                                <div class="icon-ring"></div>
-                            </div>
-                            <div class="stat-trend up">
-                                <i class="fas fa-arrow-trend-up"></i>
-                                <span>+12%</span>
-                            </div>
+                            <div class="stat-icon-wrap purple"><i class="fas fa-crosshairs"></i><div class="icon-ring"></div></div>
+                            <div class="stat-trend up"><i class="fas fa-arrow-trend-up"></i><span>+12%</span></div>
                         </div>
                         <div class="stat-bottom">
                             <h2 id="hero-total" class="stat-number">0</h2>
@@ -229,20 +273,13 @@
                         <div class="stat-3d-orb purple"></div>
                     </div>
                 </div>
-
                 <div class="tilt-card stat-card" data-accent="rose" id="stat-blocked">
                     <div class="card-3d-inner">
                         <div class="card-shine"></div>
                         <div class="card-border-glow rose"></div>
                         <div class="stat-top">
-                            <div class="stat-icon-wrap rose">
-                                <i class="fas fa-shield-virus"></i>
-                                <div class="icon-ring"></div>
-                            </div>
-                            <div class="stat-trend up danger-text">
-                                <i class="fas fa-arrow-trend-up"></i>
-                                <span>+5%</span>
-                            </div>
+                            <div class="stat-icon-wrap rose"><i class="fas fa-shield-virus"></i><div class="icon-ring"></div></div>
+                            <div class="stat-trend up danger-text"><i class="fas fa-arrow-trend-up"></i><span>+5%</span></div>
                         </div>
                         <div class="stat-bottom">
                             <h2 id="hero-blocked" class="stat-number">0</h2>
@@ -251,20 +288,13 @@
                         <div class="stat-3d-orb rose"></div>
                     </div>
                 </div>
-
                 <div class="tilt-card stat-card" data-accent="cyan" id="stat-sigs">
                     <div class="card-3d-inner">
                         <div class="card-shine"></div>
                         <div class="card-border-glow cyan"></div>
                         <div class="stat-top">
-                            <div class="stat-icon-wrap cyan">
-                                <i class="fas fa-fingerprint"></i>
-                                <div class="icon-ring"></div>
-                            </div>
-                            <div class="stat-trend neutral">
-                                <i class="fas fa-minus"></i>
-                                <span>Stable</span>
-                            </div>
+                            <div class="stat-icon-wrap cyan"><i class="fas fa-fingerprint"></i><div class="icon-ring"></div></div>
+                            <div class="stat-trend neutral"><i class="fas fa-minus"></i><span>Stable</span></div>
                         </div>
                         <div class="stat-bottom">
                             <h2 id="intelligence-size" class="stat-number">0</h2>
@@ -274,8 +304,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- CHART SECTION -->
             <div class="chart-section">
                 <div class="glass-card chart-card tilt-card">
                     <div class="card-3d-inner">
@@ -285,19 +313,12 @@
                                 <h3><i class="fas fa-wave-square"></i> Live Scan Activity</h3>
                                 <p class="card-subtitle">Risk scores over time</p>
                             </div>
-                            <div class="badge-tag live">
-                                <span class="pulse-dot"></span>
-                                LIVE TELEMETRY
-                            </div>
+                            <div class="badge-tag live"><span class="pulse-dot"></span>LIVE TELEMETRY</div>
                         </div>
-                        <div class="chart-box">
-                            <canvas id="activityChart"></canvas>
-                        </div>
+                        <div class="chart-box"><canvas id="activityChart"></canvas></div>
                     </div>
                 </div>
             </div>
-
-            <!-- TABLE -->
             <div class="glass-card table-card">
                 <div class="table-head">
                     <div class="table-title-group">
@@ -305,28 +326,13 @@
                         <p class="card-subtitle">Latest URL analyses from the neural engine</p>
                     </div>
                     <div class="table-actions">
-                        <button class="table-export-btn neon-btn" id="exportRecentScansBtn" onclick="exportRecentScans()" title="Export recent scans as PDF reports">
-                            <i class="fas fa-file-export"></i> Export Recent
-                        </button>
-                        <div class="badge-tag live">
-                            <span class="pulse-dot"></span>
-                            LIVE FEED
-                        </div>
+                        <button class="table-export-btn neon-btn" id="exportRecentScansBtn" onclick="exportRecentScans()"><i class="fas fa-file-export"></i> Export Recent</button>
+                        <div class="badge-tag live"><span class="pulse-dot"></span>LIVE FEED</div>
                     </div>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>URL</th>
-                                <th>SOURCE</th>
-                                <th>VERDICT</th>
-                                <th>SCORE</th>
-                                <th>TIME</th>
-                                <th>EXPORT</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>ID</th><th>URL</th><th>SOURCE</th><th>VERDICT</th><th>SCORE</th><th>TIME</th><th>EXPORT</th></tr></thead>
                         <tbody id="scanTableBody">
                             <tr class="skeleton-row"><td colspan="7"><div class="skeleton-line"></div></td></tr>
                             <tr class="skeleton-row"><td colspan="7"><div class="skeleton-line"></div></td></tr>
@@ -337,7 +343,7 @@
             </div>
         </div>
 
-        <!-- HISTORY PAGE -->
+        <!-- HISTORY -->
         <div id="history-page" class="page-content">
             <div class="glass-card table-card">
                 <div class="table-head">
@@ -352,15 +358,7 @@
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>LOG ID</th>
-                                <th>TARGET URL</th>
-                                <th>VERDICT</th>
-                                <th>SCORE</th>
-                                <th>TIMESTAMP</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>LOG ID</th><th>TARGET URL</th><th>VERDICT</th><th>SCORE</th><th>TIMESTAMP</th></tr></thead>
                         <tbody id="fullHistoryBody">
                             <tr class="skeleton-row"><td colspan="5"><div class="skeleton-line"></div></td></tr>
                             <tr class="skeleton-row"><td colspan="5"><div class="skeleton-line"></div></td></tr>
@@ -370,10 +368,10 @@
             </div>
         </div>
 
-        <!-- DATABASE PAGE -->
+        <!-- DATABASE -->
         <div id="database-page" class="page-content">
             <div class="glass-card">
-                <div class="table-head" style="border-bottom: 1px solid var(--border);">
+                <div class="table-head" style="border-bottom:1px solid var(--border);">
                     <div class="table-title-group">
                         <h3><i class="fas fa-dna neon-icon"></i> Threat Signature Repository</h3>
                         <p class="card-subtitle">Known malicious URL patterns indexed</p>
@@ -389,7 +387,7 @@
             </div>
         </div>
 
-        <!-- ANALYTICS PAGE -->
+        <!-- ANALYTICS -->
         <div id="analytics-page" class="page-content">
             <div class="analytics-grid">
                 <div class="glass-card chart-card tilt-card">
@@ -401,9 +399,7 @@
                                 <p class="card-subtitle">Breakdown by category</p>
                             </div>
                         </div>
-                        <div class="chart-box" style="height: 380px;">
-                            <canvas id="analyticsChart"></canvas>
-                        </div>
+                        <div class="chart-box" style="height:380px;"><canvas id="analyticsChart"></canvas></div>
                     </div>
                 </div>
                 <div class="glass-card score-card tilt-card">
@@ -432,18 +428,9 @@
                                 <div class="ring-glow"></div>
                             </div>
                             <div class="score-meta">
-                                <div class="m-item glass-card-mini">
-                                    <span>UPTIME</span>
-                                    <strong>99.9%</strong>
-                                </div>
-                                <div class="m-item glass-card-mini">
-                                    <span>SIGNATURES</span>
-                                    <strong>1.2K</strong>
-                                </div>
-                                <div class="m-item glass-card-mini">
-                                    <span>LATENCY</span>
-                                    <strong>42ms</strong>
-                                </div>
+                                <div class="m-item glass-card-mini"><span>UPTIME</span><strong>99.9%</strong></div>
+                                <div class="m-item glass-card-mini"><span>SIGNATURES</span><strong>2.3K</strong></div>
+                                <div class="m-item glass-card-mini"><span>LATENCY</span><strong>42ms</strong></div>
                             </div>
                         </div>
                     </div>
@@ -455,5 +442,4 @@
     <script src="app.js"></script>
     <script src="landing.js"></script>
 </body>
-
 </html>
