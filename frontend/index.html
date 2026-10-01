@@ -12,9 +12,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 <body>
+    <!-- 3D LANDING PAGE OVERLAY -->
+    <div id="landing-overlay" class="landing-overlay">
+        <div id="landing-3d-container"></div>
+        <div class="landing-content">
+            <div class="logo-icon landing-logo">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1 class="landing-title">SafeSurf <span class="text-gradient">Neural Core</span></h1>
+            <p class="landing-subtitle">Initializing Advanced Threat Intelligence Engine...</p>
+            <button id="enter-core-btn" class="neon-btn landing-btn">
+                <span>Enter System</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- DEEP SPACE BACKGROUND -->
     <canvas id="bgCanvas"></canvas>
     <div class="aurora-layer"></div>
@@ -59,22 +77,34 @@
                     </div>
                     <div class="modal-stat glass-card-mini">
                         <span class="modal-stat-label">Detection</span>
-                        <span id="modal-source" class="modal-stat-value">Heuristic</span>
+                        <span id="modal-source" class="modal-stat-value">ML Ensemble</span>
                     </div>
                     <div class="modal-stat glass-card-mini">
-                        <span class="modal-stat-label">Scan Time</span>
-                        <span id="modal-time" class="modal-stat-value">0.3s</span>
+                        <span class="modal-stat-label">ML Confidence</span>
+                        <span id="modal-confidence" class="modal-stat-value">98.5%</span>
                     </div>
                 </div>
                 <div class="modal-bar-wrap">
-                    <div class="modal-bar-label">Risk Analysis</div>
+                    <div class="modal-bar-label">Risk Probability Calibration</div>
                     <div class="modal-bar-track">
                         <div id="modal-bar" class="modal-bar-fill" style="width: 12%"></div>
                     </div>
                 </div>
+                <div class="modal-signals-wrap" style="margin-top: 16px; text-align: left;">
+                    <div class="modal-bar-label" style="margin-bottom: 8px;"><i class="fas fa-microchip" style="color: var(--accent); margin-right: 6px;"></i> Explainable Neural Signals:</div>
+                    <div id="modal-signals-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;"></div>
+                </div>
             </div>
-            <button class="modal-action-btn neon-btn" onclick="closeModal()">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            <div class="modal-actions-container" style="display: flex; gap: 10px; margin-top: 18px;">
+                <button class="modal-action-btn neon-btn" id="exportPdfBtn" onclick="exportCurrentScanPdf()" style="flex: 1; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border: none; border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i class="fas fa-file-pdf"></i> Export PDF Report
+                </button>
+                <button class="modal-action-btn" id="archiveCloudBtn" onclick="archiveCurrentScanToCloud()" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--text-main, #fff); border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i class="fas fa-cloud-arrow-up"></i> Save to Cloudinary
+                </button>
+            </div>
+            <button class="modal-action-btn" onclick="closeModal()" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: #94a3b8; font-size: 0.8rem; cursor: pointer; padding: 6px;">
+                <i class="fas fa-xmark"></i> Dismiss
             </button>
         </div>
     </div>
@@ -274,9 +304,14 @@
                         <h3><i class="fas fa-radar neon-icon"></i> Recent Threat Scans</h3>
                         <p class="card-subtitle">Latest URL analyses from the neural engine</p>
                     </div>
-                    <div class="badge-tag live">
-                        <span class="pulse-dot"></span>
-                        LIVE FEED
+                    <div class="table-actions">
+                        <button class="table-export-btn neon-btn" id="exportRecentScansBtn" onclick="exportRecentScans()" title="Export recent scans as PDF reports">
+                            <i class="fas fa-file-export"></i> Export Recent
+                        </button>
+                        <div class="badge-tag live">
+                            <span class="pulse-dot"></span>
+                            LIVE FEED
+                        </div>
                     </div>
                 </div>
                 <div class="table-container">
@@ -289,12 +324,13 @@
                                 <th>VERDICT</th>
                                 <th>SCORE</th>
                                 <th>TIME</th>
+                                <th>EXPORT</th>
                             </tr>
                         </thead>
                         <tbody id="scanTableBody">
-                            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-line"></div></td></tr>
-                            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-line"></div></td></tr>
-                            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-line"></div></td></tr>
+                            <tr class="skeleton-row"><td colspan="7"><div class="skeleton-line"></div></td></tr>
+                            <tr class="skeleton-row"><td colspan="7"><div class="skeleton-line"></div></td></tr>
+                            <tr class="skeleton-row"><td colspan="7"><div class="skeleton-line"></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -417,6 +453,7 @@
     </main>
 
     <script src="app.js"></script>
+    <script src="landing.js"></script>
 </body>
 
 </html>

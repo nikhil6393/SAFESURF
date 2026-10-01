@@ -1,5 +1,181 @@
 [
   {
+    "url": "https://claude.ai/chat/98afe535-e513-4080-97d5-c38aa2b7a272",
+    "label": "Safe",
+    "score": 5,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:44:36.393Z",
+    "refId": "REF-JISR1ZMV1"
+  },
+  {
+    "url": "https://claude.ai/new",
+    "label": "Safe",
+    "score": 5,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:42:51.048Z",
+    "refId": "REF-S53Y3TG3K"
+  },
+  {
+    "url": "https://accounts.google.com/gsi/transform",
+    "label": "Safe",
+    "score": 0,
+    "source": "whitelist",
+    "timestamp": "2026-09-09T19:42:49.897Z",
+    "refId": "REF-IZKQL9M33"
+  },
+  {
+    "url": "https://accounts.google.com/signin/oauth/id?authuser=1&part=AJi8hAPqqsvVynpXc-oGIj_q6Rjy38voGGSF017a_yn8nL93To4LqfIu3aNjV4eSBdZKd3p2XSXki_B9U-RKTBsWvIJSgEtT-eIO26rtScU9B8rNERhRSbQ2ppKANWi6CGcuZey0M1uH_16br3G_QzmO5hfAGH6_zu-8DgXkbSEFlvIMC4IB1n9yIJm2-yb9lxy6JZN1SI4q-eUsONfBPhPtzliAtOvB31iaykZ8Rvm4vUGhUGRmYsWMAOz8crXyR9IRhR-unFEFJHqH1eYSvdVTa3xH_sE3MKnpn3GtDqo-nhcp38UC_olAkUNTP4wTEY-KYkf_NvOO611tEIXeFQiElkv4y2HM3Fj-oN9bmTSuAZRySFSwUz0e_BBs__0ZoyCrKaw1BaHi3f8WIDckTirmbwX6bT12WMf6Egcnr1N5VbJomds1AbDaF94lYBoM9viDogpXbw2W3JnavCi6WbP8-DZi9zZRXveIB7oxc7JrjSPg-h3RV1T-iQxobMA08qI8VqmtnFFf1y5JDSZs8wLvBg9NeOwB2Iy6iHKLkAoDdpsa02GBn6UhZxcf8l2DC6iDSIw_tTAmAF8ysjirlDm9t_c0Y6SbmpSYmqFTilxzRSqHXOsmqqciD97MXUd4Z7yp8qpti09HabqhkBMS9wyLd098bVortNS8Du_ISDqetsdsJmFTlVezl8241cakLFB1h89Gfg6HalPhOPOGnZ9K8-2BPk_NJQs7x3cv9m9cGFrjSoyFdryyBVzx8Cg4VMRg9s8yItg5Fm_klY8U277AbRHbHz3AWdT6qqJVAkj1RB4Enbsr99dv3V_-nDY-qVaAEsXYMPcVYh1g2BZJGxK-BB3HAlhQ8eQ9SbDw8BptVC8utBZ1AWUWVtgx4pM8oExdPTT87lU8-4DcsIcFO5DRow16as7it-5r7Sdz8ahSuv_WtOag_-9toyikuJF825Zv7harIuKcS9NKGKMmdSo1npm_ltZWsw&flowName=GeneralOAuthFlow&as=S1997962202:1788982961098860&client_id=1062961139910-l2m55cb9h51u5cuc9c56eb3fevouidh9.apps.googleusercontent.com&rapt=AEjHL4OMDkY3HEPeES59niBW77PVy4FlBm3sfgzM7zseoEyEnxKjBecMN_ZMyD-yd1cYqSys0werWMSSOfy-VcTvxmD9MxaYhvEj4WCSQFoiBjaWuyZ0fcU&requestPath=/signin/oauth/v3/consent#",
+    "label": "Safe",
+    "score": 0,
+    "source": "whitelist",
+    "timestamp": "2026-09-09T19:42:48.156Z",
+    "refId": "REF-CY1TZSGL0"
+  },
+  {
+    "url": "https://accounts.google.com/v3/signin/accountchooser?access_type=offline&client_id=1062961139910-l2m55cb9h51u5cuc9c56eb3fevouidh9.apps.googleusercontent.com&display=popup&enable_granular_consent=true&gis_params=GBMqKzgwVVB0VXRlOTQ5WUR5Nk4vbjBnYm5WY2xtWWQzTzhnaWNudlJIRHUyMDg4AUIKYXV0aDQ1MjA0M2gB&gsiwebsdk=gis_attributes&include_granted_scopes=true&origin=https%3A%2F%2Fclaude.ai&prompt=consent&redirect_uri=gis_transform&response_mode=form_post&response_type=code&scope=openid+profile+email&dsh=S1997962202%3A1788982961098860&o2v=1&service=lso&flowName=GeneralOAuthFlow&opparams=%253Fresponse_mode%253Dform_post%2526enable_granular_consent%253Dtrue%2526gis_params%253DGBMqKzgwVVB0VXRlOTQ5WUR5Nk4vbjBnYm5WY2xtWWQzTzhnaWNudlJIRHUyMDg4AUIKYXV0aDQ1MjA0M2gB&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANPp-f4GFiztHUwijwoZYDzNbxNVGRD_ZQt5izwZIomJGAfuhNJj55KtssUfA9UtZQpkYhUbtEEUf_EJjA3V5vfbmh2CgbhU9qX_Io8DiKya1pzBsWfL0Kyocj4JmHSZ0ZkJX5jh8O5_jU2zTckvtDntxEs3J4eZZl0KAMGVZfrH03ywFGJOJR4kBmg8oVJsm2gqR4M1InqXf4gEYuh3Z3qMbAy8f2tVZr7-y-RirjhhkmID_Xc-gEhOiRD8fcqgZuD20DO3Lbme836eh0h4cYdpkdRlnaWWg3i4J1dVeYGtt2vz7kNx1HZOlJgI5KWFConYT8kQb9dncOsraEh8ESBjLfY5HZ-jFYhfXNpVgrbnTtGlyuYGz0CUDLrlJsb8e2CXDLY_n8GC4b0Da2Kwi6707NQMYznnuLpONJ52fE0RunHUIxhgD8_erVL1xJ-uN0cBo9EgBv6kO7fPf5lGYQLBV9xxg%26flowName%3DGeneralOAuthFlow%26as%3DS1997962202%253A1788982961098860%26client_id%3D1062961139910-l2m55cb9h51u5cuc9c56eb3fevouidh9.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fclaude.ai",
+    "label": "Safe",
+    "score": 0,
+    "source": "whitelist",
+    "timestamp": "2026-09-09T19:42:42.909Z",
+    "refId": "REF-66CKCIAFX"
+  },
+  {
+    "url": "https://claude.ai/login?from=logout",
+    "label": "Safe",
+    "score": 2,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:42:39.598Z",
+    "refId": "REF-P32KBTRBI"
+  },
+  {
+    "url": "https://claude.ai/logout",
+    "label": "Safe",
+    "score": 0,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:42:37.820Z",
+    "refId": "REF-78KADX20U"
+  },
+  {
+    "url": "https://tokenkarma.app/tips/?src=ext",
+    "label": "Safe",
+    "score": 3,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:15:48.465Z",
+    "refId": "REF-WX1VLT4GM"
+  },
+  {
+    "url": "http://localhost:5000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:12:53.600Z",
+    "refId": "REF-A6AY62C3X"
+  },
+  {
+    "url": "http://localhost:5000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T19:00:18.182Z",
+    "refId": "REF-OM5Q3KXCY"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:56:57.618Z",
+    "refId": "REF-B8ZN2RFV7"
+  },
+  {
+    "url": "https://claude.ai/chat/42b38153-6f2b-4e47-bfe4-ff296b2483a7",
+    "label": "Safe",
+    "score": 4,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:55:04.310Z",
+    "refId": "REF-00X8530KO"
+  },
+  {
+    "url": "https://claude.ai/new",
+    "label": "Safe",
+    "score": 5,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:53:57.005Z",
+    "refId": "REF-8AZGQ6TWH"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:53:18.355Z",
+    "refId": "REF-T2USQHA4S"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:49:59.660Z",
+    "refId": "REF-II4NN6W7X"
+  },
+  {
+    "url": "https://cloudinary.com/documentation/developer_onboarding_faq_find_credentials",
+    "label": "Safe",
+    "score": 6,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:43:11.760Z",
+    "refId": "REF-UH11ZAMWT"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:43:07.055Z",
+    "refId": "REF-VZFK2382X"
+  },
+  {
+    "url": "https://www.linkedin.com/developers/apps/264370240/auth",
+    "label": "Safe",
+    "score": 0,
+    "source": "whitelist",
+    "timestamp": "2026-09-09T18:39:14.336Z",
+    "refId": "REF-4JLBP69DF"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:39:09.347Z",
+    "refId": "REF-4QG56AZ98"
+  },
+  {
+    "url": "http://localhost:5000/",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:38:51.984Z",
+    "refId": "REF-UOZQCYDFG"
+  },
+  {
+    "url": "http://localhost:3000/",
+    "label": "Safe",
+    "score": 9,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:32:58.641Z",
+    "refId": "REF-HY65Q1SV7"
+  },
+  {
+    "url": "http://paypal.com.account-verify.security-checkpoint.xyz/login.php",
+    "label": "Malicious",
+    "score": 92,
+    "source": "ml_ensemble",
+    "timestamp": "2026-09-09T18:32:07.135Z",
+    "refId": "REF-BKFVN06Z1"
+  },
+  {
     "url": "http://wap. xxxmobilemovieclub.com?n=QJKGIGHJJGCBL",
     "label": "Safe",
     "score": 25,
@@ -622,181 +798,5 @@
     "source": "heuristics",
     "timestamp": "2026-02-20T06:39:06.572Z",
     "refId": "REF-1ZV0FN094"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/3046418/brute-force-approach-java-by-g1-cvt1/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:39:03.072Z",
-    "refId": "REF-KEZN875S5"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/3046418/brute-force-approach-java-by-g1-cvt1/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:39:02.612Z",
-    "refId": "REF-ETXVNXWFX"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:38:54.167Z",
-    "refId": "REF-N0TD9I2Q8"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/7445283/brute-optimal-solution-100-beats-using-j-2drs/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:38:26.471Z",
-    "refId": "REF-85Y85IT3G"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/7445283/brute-optimal-solution-100-beats-using-j-2drs/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:38:25.899Z",
-    "refId": "REF-BXPQDSMMP"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/solutions/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:37:56.145Z",
-    "refId": "REF-1P5JOQB7T"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/description/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:37:53.396Z",
-    "refId": "REF-2A58MV3AE"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:37:52.938Z",
-    "refId": "REF-QCIUP6PIK"
-  },
-  {
-    "url": "https://leetcode.com/progress/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:30:46.756Z",
-    "refId": "REF-21S2EP5LZ"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/submissions/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:30:21.495Z",
-    "refId": "REF-NDDE2P5UZ"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/submissions/1925095719/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:30:00.545Z",
-    "refId": "REF-GYQERAMLA"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/submissions/1925095719/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:59.912Z",
-    "refId": "REF-S4T6Y92NL"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:50.588Z",
-    "refId": "REF-LIBB4J3ME"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/5762710/just-5-line-with-explanation-in-code-by-g0dxt/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:46.041Z",
-    "refId": "REF-6B7HQZ03P"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/5762710/just-5-line-with-explanation-in-code-by-g0dxt/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:45.472Z",
-    "refId": "REF-RTKCVVHJ2"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:39.184Z",
-    "refId": "REF-R4S1XGXSJ"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/884016/easy-to-understand-no-extra-space-java-b-cbyr/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:37.372Z",
-    "refId": "REF-BN7G6WX4Q"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:18.029Z",
-    "refId": "REF-5B4PR3XWS"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:29:09.497Z",
-    "refId": "REF-CAPGDHBDM"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/884016/easy-to-understand-no-extra-space-java-b-cbyr/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:59.941Z",
-    "refId": "REF-NVG70O611"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/884016/easy-to-understand-no-extra-space-java-b-cbyr/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:59.294Z",
-    "refId": "REF-PN78ORYWX"
-  },
-  {
-    "url": "https://leetcode.com/problems/duplicate-zeros/solutions/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:28:50.051Z",
-    "refId": "REF-OW9Y3IHVO"
   }
 ]

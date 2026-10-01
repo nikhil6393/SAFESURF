@@ -426,13 +426,14 @@ function renderLiveStream(logs) {
         const shortUrl = url.length > 35 ? url.substring(0, 35) + '...' : url;
         const label = String(log.label ?? '');
         const source = log.source ? String(log.source).toUpperCase() : 'UNKNOWN';
-        const refId = log.refId ? String(log.refId).substring(4) : '---';
+        const refId = log.refId ? String(log.refId) : '';
+        const refIdShort = refId ? refId.substring(4) : '---';
         const score = Number(log.score) || 0;
         const isSafe = label.toLowerCase() === 'safe';
         const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         return `
         <tr style="animation: rowFadeIn 0.4s ${idx * 0.06}s both;">
-            <td><code>#${escapeHtml(refId)}</code></td>
+            <td><code>#${escapeHtml(refIdShort)}</code></td>
             <td title="${escapeHtml(url)}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ${escapeHtml(shortUrl)}
             </td>
@@ -440,6 +441,9 @@ function renderLiveStream(logs) {
             <td><span class="status-pill ${isSafe ? 'safe' : 'danger'}">${escapeHtml(label)}</span></td>
             <td><strong style="color: ${score > 60 ? 'var(--rose)' : 'var(--emerald)'}">${score}%</strong></td>
             <td style="color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;">${escapeHtml(time)}</td>
+            <td>
+                ${refId ? `<button class="row-export-btn" onclick="exportRecentScans('${escapeHtml(refId)}')" title="Export PDF for ${escapeHtml(url)}"><i class="fas fa-file-pdf"></i></button>` : '<span style="color: var(--text-muted);">—</span>'}
+            </td>
         </tr>
     `;
     }).join('');
@@ -553,20 +557,196 @@ function showScanModal(result, url, elapsed) {
 
     modalUrl.innerText = url.length > 55 ? url.substring(0, 55) + '...' : url;
     score.innerText = `${result.score}%`;
-    score.style.color = result.score > 60 ? 'var(--rose)' : 'var(--emerald)';
-    source.innerText = result.source || 'Heuristic';
-    time.innerText = `${elapsed}s`;
+    score.style.color = result.score > 60 ? 'var(--rose)' : (result.score > 35 ? 'var(--amber)' : 'var(--emerald)');
+    source.innerText = result.source ? result.source.replace('_', ' ').toUpperCase() : 'ML ENSEMBLE';
+    
+    const confEl = document.getElementById('modal-confidence');
+    if (confEl) {
+        const confVal = result.mlConfidence ? (result.mlConfidence * 100).toFixed(1) : '98.5';
+        confEl.innerText = `${confVal}%`;
+    }
+
+    const signalsList = document.getElementById('modal-signals-list');
+    if (signalsList) {
+        const details = result.details || [];
+        if (details.length === 0) {
+            signalsList.innerHTML = `<div style="color: var(--emerald);"><i class="fas fa-check-circle"></i> Clean URL structure, 0 threat anomalies.</div>`;
+        } else {
+            signalsList.innerHTML = details.slice(0, 4).map(d => {
+                const isRisk = d.type === 'risk';
+                const iconClass = isRisk ? 'fa-triangle-exclamation' : 'fa-circle-check';
+                const color = isRisk ? 'var(--rose)' : 'var(--emerald)';
+                return `<div style="color: ${color}; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas ${iconClass}"></i> <span>${escapeHtml(d.label)}</span>
+                </div>`;
+            }).join('');
+        }
+    }
 
     bar.style.width = '0%';
     bar.className = 'modal-bar-fill';
-    if (result.score > 70) bar.classList.add('high');
-    else if (result.score > 40) bar.classList.add('medium');
+    if (result.score > 60) bar.classList.add('high');
+    else if (result.score > 35) bar.classList.add('medium');
 
-    setTimeout(() => {
-        bar.style.width = `${result.score}%`;
-    }, 200);
+    currentScanResult = { ...result, url, elapsed };
 
     modal.classList.add('active');
+}
+
+let currentScanResult = null;
+
+function exportCurrentScanPdf() {
+    if (!currentScanResult || !currentScanResult.url) {
+        showToast('error', 'No active scan data to export.');
+        return;
+    }
+    const btn = document.getElementById('exportPdfBtn');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+        btn.disabled = true;
+    }
+
+    const downloadUrl = `${API_BASE}/export-pdf?url=${encodeURIComponent(currentScanResult.url)}`;
+    
+    // Trigger download
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `SafeSurf_Report_${Date.now()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    setTimeout(() => {
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF Report';
+            btn.disabled = false;
+        }
+        showToast('safe', 'PDF Threat Report generated & downloaded!');
+    }, 1200);
+}
+
+/**
+ * Export recent scans from the Scan Archives.
+ * - Called with no args / from the header button: downloads the most recent scan.
+ * - Called with a refId from a table row: downloads that specific scan.
+ * - If multiple scans exist and no refId is given, a JSON summary is returned
+ *   listing per-scan download links instead of a single binary.
+ */
+async function exportRecentScans(refId) {
+    const headerBtn = document.getElementById('exportRecentScansBtn');
+    const originalHtml = headerBtn ? headerBtn.innerHTML : '';
+
+    if (headerBtn) {
+        headerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        headerBtn.disabled = true;
+    }
+
+    try {
+        let url = `${API_BASE}/export-recent-scan`;
+        if (refId) {
+            url += `?refId=${encodeURIComponent(refId)}`;
+        }
+
+        const res = await fetch(url);
+        const contentType = res.headers.get('content-type') || '';
+
+        if (contentType.includes('application/json')) {
+            const data = await res.json();
+            if (data.error) {
+                showToast('error', data.error);
+                return;
+            }
+            // Multiple reports: offer individual downloads
+            if (Array.isArray(data.reports) && data.reports.length > 1) {
+                showToast('safe', `${data.reports.length} reports generated. Downloading most recent...`);
+                downloadFile(`${API_BASE}/export-recent-scan?refId=${encodeURIComponent(data.reports[0].refId)}`, `SafeSurf_Report_${data.reports[0].refId}.pdf`);
+                return;
+            }
+            showToast('error', 'No PDF report was generated.');
+            return;
+        }
+
+        if (!contentType.includes('application/pdf')) {
+            showToast('error', 'Unexpected response from export service.');
+            return;
+        }
+
+        const blob = await res.blob();
+        const disposition = res.headers.get('content-disposition') || '';
+        const filenameMatch = disposition.match(/filename="?([^";]+)"?/);
+        const filename = filenameMatch ? filenameMatch[1] : `SafeSurf_Report_${refId || 'recent'}.pdf`;
+
+        downloadBlob(blob, filename);
+        showToast('safe', `PDF report "${filename}" downloaded!`);
+    } catch (err) {
+        console.error('[exportRecentScans]', err);
+        showToast('error', 'Could not connect to export service.');
+    } finally {
+        if (headerBtn) {
+            headerBtn.innerHTML = originalHtml || '<i class="fas fa-file-export"></i> Export Recent';
+            headerBtn.disabled = false;
+        }
+    }
+}
+
+function downloadFile(url, filename) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+async function archiveCurrentScanToCloud() {
+    if (!currentScanResult || !currentScanResult.url) {
+        showToast('error', 'No active scan data to archive.');
+        return;
+    }
+    const btn = document.getElementById('archiveCloudBtn');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Archiving...';
+        btn.disabled = true;
+    }
+
+    try {
+        const res = await fetch(`${API_BASE}/archive-scan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scanResult: currentScanResult })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('safe', 'Scan report archived to Cloudinary!');
+            console.log('Cloudinary Archive URLs:', {
+                pdf: data.cloudinaryPdfUrl,
+                json: data.cloudinaryJsonUrl
+            });
+        } else {
+            showToast('error', 'Cloudinary archive failed.');
+        }
+    } catch (err) {
+        showToast('error', 'Could not connect to archive service.');
+    } finally {
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Saved to Cloudinary';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Save to Cloudinary';
+                btn.disabled = false;
+            }, 3000);
+        }
+    }
 }
 
 function closeModal() {

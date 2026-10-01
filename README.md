@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/SafeSurf-v2.0%20Advanced-7c3aed?style=for-the-badge&logo=shield&logoColor=white" alt="SafeSurf" height="40"/>
+<img src="https://img.shields.io/badge/SafeSurf-v3.0%20Advanced-7c3aed?style=for-the-badge&logo=shield&logoColor=white" alt="SafeSurf" height="40"/>
 
 # SafeSurf — Real-Time Phishing & Malware URL Detection
 
-**A Deterministic, Multi-Layer Defense System for Browser-Level Threat Neutralization**
+**A Zero-Latency Edge AI & Multi-Layer Defense System for Browser-Level Threat Neutralization**
 
 [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-safesurf.vercel.app-7c3aed?style=for-the-badge)](https://malware-url-detector.vercel.app/)
 [![GitHub](https://img.shields.io/badge/GitHub-Source%20Code-181717?style=for-the-badge&logo=github)](https://github.com/nikhil6393/malware-url-detector)
@@ -20,10 +20,10 @@
 
 | ⚡ Lookup Speed | 🎯 Test Accuracy | 🛡️ Detection Signals | 🔍 Detection Layers |
 |:---:|:---:|:---:|:---:|
-| **< 0.1 ms** | **13 / 13 (100%)** | **15+** | **4** |
-| O(1) Hash-Map | v2 Engine | Structural + Lexical | Quad-Layer |
+| **< 0.1 ms** | **97.83%** | **40 Features** | **4** |
+| Zero-Latency Edge AI | v3 ML Engine | Structural + Lexical | Quad-Layer |
 
-> **Zero-Day Ready** — Unlike pure blacklist tools, SafeSurf v2 detects never-before-seen phishing domains through **Shannon entropy scoring, homoglyph detection, consonant-ratio DGA analysis, and live threat feed integration**. No ML, no paid API keys.
+> **Zero-Day Ready** — SafeSurf v3 detects never-before-seen phishing domains through a **40-feature Random Forest Machine Learning model** compiled entirely into zero-dependency JSON. It features Shannon entropy scoring, homoglyph detection, DGA analysis, and **Live DNS Fast-Flux detection**.
 
 </div>
 
@@ -46,16 +46,18 @@
 
 ---
 
-## 🆕 What's New in v2.0
+## 🆕 What's New in v3.0 (Zero-Latency ML Edition)
 
-> **Released:** August 2026 — Full detection engine rewrite
+> **Released:** September 2026 — Full AI engine rewrite
 
 | Change | Impact |
 |:---|:---|
-| **Shannon Entropy Scoring** | Catches algorithmically generated (DGA) domains |
-| **Consonant Ratio Signal** | Detects no-vowel random strings like `xk9f2rp4mz.tk` |
-| **Homoglyph Detection** | Catches `g00gle.com`, `micrоsoft.com` (Cyrillic a), `аpple.com` — was completely missing |
-| **Open Redirect Params** | Flags `?redirect=`, `?next=`, `?goto=` — common phishing vector |
+| **Zero-Latency ML JSON Compiler** | Serializes a 100-tree Random Forest Python model directly into a lightweight JSON file for the browser. |
+| **DGA Consonant Detection** | `longest_consec_consonants` detects machine-generated random strings (`xk9f2rp4mz.tk`). |
+| **Firewall Evasion Detection** | `has_suspicious_port` flags non-standard ports like `:8080` or `:8443`. |
+| **Live DNS Fast-Flux Scanner** | Backend actively interrogates DNS to detect botnets rapidly shifting IPs. |
+| **Full-Stack Parity** | The exact 40-feature extraction math runs identically in Python (Training), Node.js (Backend API), and JavaScript (Browser Extension). |
+| **Homoglyph Detection** | Catches `g00gle.com`, `micrоsoft.com` (Cyrillic a), `аpple.com`. |
 | **URL Anatomy Decomposition** | Scores subdomain depth, SLD length, path length, param count independently |
 | **Live Threat Feed (free)** | URLhaus + OpenPhish + MalwareDomains auto-refresh every 6 hours — zero API keys |
 | **HTTPS bonus REMOVED** | 90%+ of phishing sites use HTTPS (Let's Encrypt). Rewarding HTTPS was a scoring bug |
@@ -131,11 +133,11 @@ When a hostname is found in any live feed, it returns **score: 92** immediately 
 
 ---
 
-### Layer 3 — Advanced Heuristic Scoring Engine (v2.0)
+### Layer 3 — Zero-Latency Machine Learning Engine (v3.0)
 
-> *Inspired by SpamAssassin's additive rule scoring — fully transparent, no black-box*
+> *Compiled 100-Tree Random Forest running purely in JavaScript.*
 
-For URLs not in the dataset or live feeds, the engine extracts **15+ structural and lexical signals** and computes a continuous **Risk Score in [0, 100]**.
+For URLs not in the dataset or live feeds, the engine extracts **40 structural and lexical signals** and computes a continuous **Risk Score in [0, 100]**.
 
 #### 🔴 Critical Risk Signals
 
@@ -209,12 +211,13 @@ malware-url-detector/
 │   └── style.css                   # Locked 380×600px, neon-accent dark theme
 │
 ├── backend/                        # Intelligence Core (Node.js / Express)
-│   ├── server.js                   # 3-layer pipeline: dataset → feed → heuristics
+│   ├── server.js                   # 4-layer pipeline: whitelist → feed → DNS → ML
 │   ├── services/
 │   │   ├── DatasetLoader.js        # O(1) Map indexer — CSV-backed
 │   │   ├── ThreatFeedService.js    # Live feeds: URLhaus + OpenPhish (auto 6h refresh)
-│   │   ├── featureExtractor.js     # 15+ signal extraction (entropy, homoglyphs, anatomy)
-│   │   ├── detectionEngine.js      # Weighted scoring classifier (v2.0 weights)
+│   │   ├── DnsAnalysisService.js   # Live Fast-Flux IP shifting detection
+│   │   ├── featureExtractor.js     # 40-feature extraction (entropy, homoglyphs, anatomy)
+│   │   ├── detectionEngine.js      # JSON ML Evaluator
 │   │   ├── HistoryService.js       # MongoDB + local JSON fallback
 │   │   ├── ScanResult.js           # Mongoose schema
 │   │   └── db.js                   # MongoDB Atlas connection manager
