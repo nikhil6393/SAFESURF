@@ -1,5 +1,61 @@
 [
   {
+    "url": "https://freebuff.com/cli",
+    "label": "Safe",
+    "score": 3,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-02T15:49:28.515Z",
+    "refId": "REF-O53DY5J14"
+  },
+  {
+    "url": "https://freebuff.com/desktop",
+    "label": "Safe",
+    "score": 2,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-02T15:48:37.808Z",
+    "refId": "REF-VP3ZMF5QX"
+  },
+  {
+    "url": "https://freebuff.com/desktop",
+    "label": "Safe",
+    "score": 2,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-02T15:48:36.718Z",
+    "refId": "REF-KKXGI6Q25"
+  },
+  {
+    "url": "https://freebuff.com/login?callbackUrl=%2Fchat",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-02T15:48:35.744Z",
+    "refId": "REF-CDHYM0DHF"
+  },
+  {
+    "url": "https://freebuff.com/login?callbackUrl=%2Fchat",
+    "label": "Safe",
+    "score": 7,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-02T15:48:33.642Z",
+    "refId": "REF-KP63G04PO"
+  },
+  {
+    "url": "https://freebuff.com/",
+    "label": "Safe",
+    "score": 1,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-01T17:29:28.196Z",
+    "refId": "REF-TUYQX0CGF"
+  },
+  {
+    "url": "https://freebuff.com/",
+    "label": "Safe",
+    "score": 1,
+    "source": "ml_ensemble",
+    "timestamp": "2026-10-01T17:29:27.100Z",
+    "refId": "REF-ALOA4TWO8"
+  },
+  {
     "url": "https://claude.ai/chat/98afe535-e513-4080-97d5-c38aa2b7a272",
     "label": "Safe",
     "score": 5,
@@ -742,61 +798,5 @@
     "source": "heuristics",
     "timestamp": "2026-02-20T12:37:10.720Z",
     "refId": "REF-WH5ZXZOF8"
-  },
-  {
-    "url": "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T12:37:08.649Z",
-    "refId": "REF-HCK5I7L7Z"
-  },
-  {
-    "url": "https://github.com/repos",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T12:36:58.576Z",
-    "refId": "REF-6KYN19F5S"
-  },
-  {
-    "url": "https://app.originality.ai/home/scan",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T12:36:52.405Z",
-    "refId": "REF-JYMZU2HGL"
-  },
-  {
-    "url": "https://notegpt.io/ai-humanizer",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T12:36:52.308Z",
-    "refId": "REF-XK55K2BZA"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/submissions/1925104600/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:39:15.563Z",
-    "refId": "REF-IMHO2VW04"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/submissions/1925104600/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:39:14.613Z",
-    "refId": "REF-JQ7D5358C"
-  },
-  {
-    "url": "https://leetcode.com/problems/merge-sorted-array/",
-    "label": "Safe",
-    "score": 0,
-    "source": "heuristics",
-    "timestamp": "2026-02-20T06:39:06.572Z",
-    "refId": "REF-1ZV0FN094"
   }
 ]
